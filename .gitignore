@@ -138,10 +138,3 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-/Assets/Samples/*
-/Assets/XR/*
-/Assets/XRI/*
-/Assets/XRI_Examples/*
-/Documentation/*
-
-
