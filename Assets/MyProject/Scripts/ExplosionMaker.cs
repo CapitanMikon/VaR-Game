@@ -29,7 +29,7 @@ public class ExplosionMaker : MonoBehaviour
                     {
                         if (colliders[i].attachedRigidbody)
                         {
-                            colliders[i].attachedRigidbody.AddExplosionForce(explosionForce, hit.point, explosionRadius);
+                            colliders[i].attachedRigidbody.AddForce(Vector3.forward * explosionForce, ForceMode.Impulse);
                             Debug.Log(colliders[i].gameObject);
                         }
                     }

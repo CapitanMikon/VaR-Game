@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool grounded = true;
 
     [SerializeField] private Vector2 input;
+    private Vector3 slopeNormal;
 
     private void Start()
     {
@@ -25,28 +26,19 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         movement.action.performed += OnMoveStart;
-        movement.action.canceled += OnMoveStart;
+        movement.action.canceled += OnMoveEnd;
+        jump.action.performed += OnJump;
     }
     
     private void OnDisable()
     {
         movement.action.performed -= OnMoveStart;
-        movement.action.canceled -= OnMoveStart;
+        movement.action.canceled -= OnMoveEnd;
+        jump.action.performed -= OnJump;
     }
 
     private void Update()
     {
-        if (grounded && jump.action.WasPerformedThisFrame())
-        {
-            Debug.Log("Jump");
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-
-        if (Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            Debug.Log("click");
-            rb.AddForce(Vector3.forward * 5f, ForceMode.Impulse);
-        }
     }
 
     void FixedUpdate()
@@ -54,50 +46,57 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
         HandleMovement();
     }
+    // ignore slopes just jump :)
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(legs.position, Vector3.down, out var slopeHit, 0.25f))
+        {
+            if (slopeNormal == Vector3.zero)
+            {
+                Debug.Log("reset y velocity");
+                var current = rb.velocity;
+                current.y = 0;
+                rb.velocity = current;
+            }
+            slopeNormal = slopeHit.normal;
+            return slopeHit.normal != Vector3.up;
+        }
+        else
+        {
+            slopeNormal = Vector3.zero;
+        }
+
+        return false;
+    }
 
     private void HandleMovement()
     {
-        /*if (input == Vector2.zero)
-        {
-            return;
-        }*/
         input.Normalize();
+        var inputDir = new Vector3(input.x, 0f, input.y);
+        var dir = OnSlope() ? Vector3.ProjectOnPlane(inputDir, slopeNormal).normalized : inputDir;
+        //Debug.DrawRay(transform.position, dir, Color.magenta);
+        var targetDir = dir * (moveSpeed * Time.fixedDeltaTime);
+        Debug.DrawRay(transform.position, targetDir * 20f, Color.blue);
         
-        var currentVelocity = rb.velocity;
-        
-        var targetVelocity = new Vector3(input.x,0f, input.y) * moveSpeed;
-        // targetVelocity.x += currentVelocity.x;
-        // targetVelocity.z += currentVelocity.z;
-        // Vector3.ClampMagnitude(targetVelocity, maxSpeed);
-        // targetVelocity.y = currentVelocity.y;
+        rb.MovePosition(transform.position + targetDir);
 
-        var changeVelocity = targetVelocity - currentVelocity;
-        changeVelocity = new Vector3(changeVelocity.x, 0f, changeVelocity.z);
-
-        Vector3.ClampMagnitude(changeVelocity, maxSpeed);
-        
-        rb.AddForce(changeVelocity, ForceMode.VelocityChange);
-
-        //rb.velocity = targetVelocity;
-
-        //currentVelocity = rb.velocity;
-        //Vector3.ClampMagnitude(currentVelocity, maxSpeed);
-        //currentVelocity.y = rb.velocity.y;
+        rb.useGravity = !OnSlope();
+        Debug.Log(OnSlope());
     }
 
     private void CheckGrounded()
     {
-        // if (Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f))
-        // {
-        //     //Debug.Log(hit.collider.gameObject);
-        //     grounded = true;
-        // }
-        // else
-        // {
-        //     grounded = false;
-        // }
+        if (Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f))
+        {
+            //Debug.Log(hit.collider.gameObject);
+            grounded = true;
+        }
+        else
+        {
+            grounded = false;
+        }
         // Debug.Log(hit.collider.gameObject);
-        grounded = Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f);
+        //grounded = Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f);
     }
 
     private void OnMoveStart(InputAction.CallbackContext ctx)
@@ -109,10 +108,17 @@ public class PlayerController : MonoBehaviour
     {
         input = Vector2.zero;
     }
+    private void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (grounded)
+        {
+            rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
+        }
+    }
 
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawRay(legs.transform.position, Vector3.down * 0.2f);
-    // }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(legs.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.2f);
+    }
 }
