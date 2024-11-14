@@ -73,6 +73,12 @@ public class PlayerController : MonoBehaviour
     {
         input.Normalize();
         var inputDir = new Vector3(input.x, 0f, input.y);
+        
+        //float left = Keyboard.current.leftArrowKey.ReadValue();
+        //float right = Keyboard.current.rightArrowKey.ReadValue();
+        //var inputDir = Vector3.right * right + Vector3.left * left;
+        //input = inputDir;
+        
         var dir = OnSlope() ? Vector3.ProjectOnPlane(inputDir, slopeNormal).normalized : inputDir;
         //Debug.DrawRay(transform.position, dir, Color.magenta);
         var targetDir = dir * (moveSpeed * Time.fixedDeltaTime);
@@ -81,7 +87,7 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(transform.position + targetDir);
 
         rb.useGravity = !OnSlope();
-        Debug.Log(OnSlope());
+        //Debug.Log(OnSlope());
     }
 
     private void CheckGrounded()

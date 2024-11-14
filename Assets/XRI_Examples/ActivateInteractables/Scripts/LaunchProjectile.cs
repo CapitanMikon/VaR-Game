@@ -17,8 +17,16 @@ namespace UnityEngine.XR.Content.Interaction
         [Tooltip("The speed at which the projectile is launched")]
         float m_LaunchSpeed = 1.0f;
 
+        public bool canFire = true;
+
         public void Fire()
         {
+            if (!canFire)
+            {
+                return;
+            }
+
+            canFire = false;
             GameObject newObject = Instantiate(m_ProjectilePrefab, m_StartPoint.position, m_StartPoint.rotation, null);
 
             if (newObject.TryGetComponent(out Rigidbody rigidBody))
@@ -29,6 +37,11 @@ namespace UnityEngine.XR.Content.Interaction
         {
             Vector3 force = m_StartPoint.forward * m_LaunchSpeed;
             rigidBody.AddForce(force);
+        }
+
+        public void ToggleFire(bool canFire)
+        {
+            this.canFire = canFire;
         }
     }
 }
