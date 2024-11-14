@@ -1,3 +1,5 @@
+using UnityEngine.Events;
+
 namespace UnityEngine.XR.Content.Interaction
 {
     /// <summary>
@@ -16,17 +18,21 @@ namespace UnityEngine.XR.Content.Interaction
         [SerializeField]
         [Tooltip("The speed at which the projectile is launched")]
         float m_LaunchSpeed = 1.0f;
+        
+        public UnityEvent fired;
 
-        public bool canFire = true;
+        public float lastFired = 0f;
 
         public void Fire()
         {
-            if (!canFire)
+            if (Time.realtimeSinceStartup - lastFired < 1f)
             {
                 return;
             }
 
-            canFire = false;
+            fired.Invoke();
+            lastFired = Time.realtimeSinceStartup;
+            
             GameObject newObject = Instantiate(m_ProjectilePrefab, m_StartPoint.position, m_StartPoint.rotation, null);
 
             if (newObject.TryGetComponent(out Rigidbody rigidBody))
@@ -37,11 +43,6 @@ namespace UnityEngine.XR.Content.Interaction
         {
             Vector3 force = m_StartPoint.forward * m_LaunchSpeed;
             rigidBody.AddForce(force);
-        }
-
-        public void ToggleFire(bool canFire)
-        {
-            this.canFire = canFire;
         }
     }
 }
