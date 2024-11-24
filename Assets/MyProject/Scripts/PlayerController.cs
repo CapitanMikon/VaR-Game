@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         if (grounded)
         {
-            rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 
