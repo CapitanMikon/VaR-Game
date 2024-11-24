@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGrounded()
     {
-        if (Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f))
+        if (Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.05f))
         {
             //Debug.Log(hit.collider.gameObject);
             grounded = true;
@@ -125,6 +125,6 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(legs.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.2f);
+        Gizmos.DrawRay(legs.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.05f);
     }
 }
