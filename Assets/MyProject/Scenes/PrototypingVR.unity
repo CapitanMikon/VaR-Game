@@ -1573,6 +1573,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &416621168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 416621169}
+  m_Layer: 0
+  m_Name: PlayerModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &416621169
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416621168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4409727761059202361}
+  m_Father: {fileID: 9185980653799105227}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &510539803
 GameObject:
   m_ObjectHideFlags: 0
@@ -4347,7 +4379,7 @@ GameObject:
   - component: {fileID: 1579838384}
   - component: {fileID: 1579838385}
   m_Layer: 27
-  m_Name: bounds
+  m_Name: PlayerWallCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7729,12 +7761,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4409727761058889841}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70710677, y: -0.00000050663954, z: -0.00000050663954, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: -0.441, z: 0}
-  m_LocalScale: {x: 0.19, y: 0.19, z: 0.19}
+  m_LocalRotation: {x: -0.7071068, y: -0.0000005066396, z: -0.0000005066396, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.44099998, z: 0}
+  m_LocalScale: {x: 0.19, y: 0.18999997, z: 0.18999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 9185980653799105227}
+  m_Father: {fileID: 416621169}
   m_LocalEulerAnglesHint: {x: 270, y: 90, z: 990}
 --- !u!33 &4409727761060013681
 MeshFilter:
@@ -9579,6 +9611,10 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1450760115660436290, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
+      propertyPath: playerModel
+      value: 
+      objectReference: {fileID: 416621168}
     - target: {fileID: 4947967757359606619, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -9640,11 +9676,12 @@ PrefabInstance:
       value: PC
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6332458107591312401, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3543908037760187108, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
       insertIndex: 1
-      addedObject: {fileID: 4409727761059202361}
+      addedObject: {fileID: 416621169}
     - targetCorrespondingSourceObject: {fileID: 3543908037760187108, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1579838384}

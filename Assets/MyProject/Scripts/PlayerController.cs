@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -7,21 +6,23 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private InputActionReference movement;
     [SerializeField] private InputActionReference jump;
+    
     [FormerlySerializedAs("speed")] [SerializeField] private float moveSpeed = 30f;
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private float maxSpeed = 30f;
+    [SerializeField] private float groundCheckDistance = 0.05f;
+    
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private Transform legs;
+    [FormerlySerializedAs("legs")] [SerializeField] private Transform feetTransform;
 
-    [SerializeField] private bool grounded = true;
+    [FormerlySerializedAs("grounded")] [SerializeField] private bool isGrounded = true;
 
     [SerializeField] private Vector2 input;
-    private Vector3 slopeNormal;
 
-    private void Start()
-    {
-        //rb.maxLinearVelocity = maxSpeed;
-    }
+    private Vector3 slopeNormal;
+    private float turnValue;
+    
+    [SerializeField] private GameObject playerModel;
 
     private void OnEnable()
     {
@@ -37,23 +38,27 @@ public class PlayerController : MonoBehaviour
         jump.action.performed -= OnJump;
     }
 
-    private void Update()
-    {
-    }
-
     void FixedUpdate()
     {
         CheckGrounded();
         HandleMovement();
+
+        if (input.magnitude >= 0.1)
+        {
+            float angle = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg;
+            var smooth = Mathf.SmoothDampAngle(playerModel.transform.localEulerAngles.y, angle, ref turnValue, 0.1f);
+            playerModel.transform.localRotation = Quaternion.Euler(0, smooth, 0);
+            
+        }
     }
-    // ignore slopes just jump :)
+    
     private bool OnSlope()
     {
-        if (Physics.Raycast(legs.position, Vector3.down, out var slopeHit, 0.25f))
+        if (Physics.Raycast(feetTransform.position, Vector3.down, out var slopeHit, groundCheckDistance))
         {
             if (slopeNormal == Vector3.zero)
             {
-                Debug.Log("reset y velocity");
+                //Debug.Log("reset y velocity");
                 var current = rb.velocity;
                 current.y = 0;
                 rb.velocity = current;
@@ -73,36 +78,27 @@ public class PlayerController : MonoBehaviour
     {
         input.Normalize();
         var inputDir = new Vector3(input.x, 0f, input.y);
-        
-        //float left = Keyboard.current.leftArrowKey.ReadValue();
-        //float right = Keyboard.current.rightArrowKey.ReadValue();
-        //var inputDir = Vector3.right * right + Vector3.left * left;
-        //input = inputDir;
-        
+
         var dir = OnSlope() ? Vector3.ProjectOnPlane(inputDir, slopeNormal).normalized : inputDir;
-        //Debug.DrawRay(transform.position, dir, Color.magenta);
+        
         var targetDir = dir * (moveSpeed * Time.fixedDeltaTime);
-        Debug.DrawRay(transform.position, targetDir * 20f, Color.blue);
+        Debug.DrawRay(transform.position, targetDir * 20f, Color.blue); // TODO: remove
         
         rb.MovePosition(transform.position + targetDir);
 
         rb.useGravity = !OnSlope();
-        //Debug.Log(OnSlope());
     }
 
     private void CheckGrounded()
     {
-        if (Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.05f))
+        if (Physics.Raycast(feetTransform.transform.position, Vector3.down, out var hit, 0.05f))
         {
-            //Debug.Log(hit.collider.gameObject);
-            grounded = true;
+            isGrounded = true;
         }
         else
         {
-            grounded = false;
+            isGrounded = false;
         }
-        // Debug.Log(hit.collider.gameObject);
-        //grounded = Physics.Raycast(legs.transform.position, Vector3.down, out var hit, 0.2f);
     }
 
     private void OnMoveStart(InputAction.CallbackContext ctx)
@@ -116,15 +112,15 @@ public class PlayerController : MonoBehaviour
     }
     private void OnJump(InputAction.CallbackContext ctx)
     {
-        if (grounded)
+        if (isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmos() // TODO: remove
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(legs.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.05f);
+        Gizmos.DrawRay(feetTransform.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.05f);
     }
 }
