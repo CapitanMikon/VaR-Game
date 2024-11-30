@@ -118,9 +118,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos() // TODO: remove
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(feetTransform.transform.position + new Vector3(input.x/4, 0f, input.y/4), Vector3.down * 0.05f);
     }
+    #endif
 }
