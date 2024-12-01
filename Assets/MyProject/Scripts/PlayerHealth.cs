@@ -10,7 +10,6 @@ public class PlayerHealth : MonoBehaviour
     private void OnEnable()
     {
         currentHealth = maxHealth;
-        transform.position = spawnPoint.position;
     }
 
     private void OnTriggerEnter(Collider other)
