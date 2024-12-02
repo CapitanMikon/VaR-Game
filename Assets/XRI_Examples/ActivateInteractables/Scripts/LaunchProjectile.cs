@@ -1,3 +1,5 @@
+using UnityEngine.Events;
+
 namespace UnityEngine.XR.Content.Interaction
 {
     /// <summary>
@@ -16,9 +18,21 @@ namespace UnityEngine.XR.Content.Interaction
         [SerializeField]
         [Tooltip("The speed at which the projectile is launched")]
         float m_LaunchSpeed = 1.0f;
+        
+        public UnityEvent fired;
+
+        public float lastFired = 0f;
 
         public void Fire()
         {
+            if (Time.realtimeSinceStartup - lastFired < 1f)
+            {
+                return;
+            }
+
+            fired.Invoke();
+            lastFired = Time.realtimeSinceStartup;
+            
             GameObject newObject = Instantiate(m_ProjectilePrefab, m_StartPoint.position, m_StartPoint.rotation, null);
 
             if (newObject.TryGetComponent(out Rigidbody rigidBody))
