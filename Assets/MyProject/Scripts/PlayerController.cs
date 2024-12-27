@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -30,13 +29,17 @@ public class PlayerController : MonoBehaviour
         movement.action.performed += OnMoveStart;
         movement.action.canceled += OnMoveEnd;
         jump.action.performed += OnJump;
+        
+        GameController.GameFinished += GameControllerOnGameFinished;
     }
-    
+
     private void OnDisable()
     {
         movement.action.performed -= OnMoveStart;
         movement.action.canceled -= OnMoveEnd;
         jump.action.performed -= OnJump;
+        
+        GameController.GameFinished -= GameControllerOnGameFinished;
     }
 
     void FixedUpdate()
@@ -117,6 +120,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+    
+    private void GameControllerOnGameFinished(int obj)
+    {
+        enabled = false;
+        rb.isKinematic = true;
     }
 
     #if UNITY_EDITOR
