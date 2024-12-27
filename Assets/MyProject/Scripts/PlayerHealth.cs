@@ -26,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
     private void TryRespawn()
     {
         currentHealth--;
+        PlayerDied?.Invoke();
         
         Debug.LogWarning($"Player Died remaining hearts = {currentHealth}!");
         if (currentHealth <= 0)
@@ -34,10 +35,10 @@ public class PlayerHealth : MonoBehaviour
             PcPlayerOver();
             PlayerNoLives?.Invoke();
         }
-        else
+        /*else
         {
             PlayerDied?.Invoke();
-        }
+        }*/
         
         transform.position = spawnPoint.position;
         

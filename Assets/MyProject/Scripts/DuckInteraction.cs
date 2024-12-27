@@ -11,6 +11,8 @@ public class DuckInteraction : MonoBehaviour
     [SerializeField] private Transform duckPlayerModel;
     [SerializeField] private InputActionReference interact;
 
+    [SerializeField] private GameObject hintHud;
+
     private void OnEnable()
     {
         interact.action.performed += OnInteract;
@@ -30,6 +32,10 @@ public class DuckInteraction : MonoBehaviour
             inDuckArea = true;
             _duckAreaControllerRef = duckAreaController;
             Debug.Log("Entered area. Press Interaction key to pick up duck!");
+            if (pickedDuck == null)
+            {
+                ShowHint(true);
+            }
         }
         
         if (other.TryGetComponent<DeliverDuckArea>(out var deliverDuckArea))
@@ -54,6 +60,7 @@ public class DuckInteraction : MonoBehaviour
             inDuckArea = false;
             Debug.Log("Left area. Press Interaction key to pick up duck!");
             //_duckAreaControllerRef = null;
+            ShowHint(false);
         }
     }
 
@@ -73,6 +80,7 @@ public class DuckInteraction : MonoBehaviour
         }
         
         interact.action.Disable();
+        ShowHint(false);
     }
 
     private void OnDeath()
@@ -87,5 +95,10 @@ public class DuckInteraction : MonoBehaviour
         _duckAreaControllerRef = null;
         pickedDuck = null;
         interact.action.Enable();
+    }
+
+    private void ShowHint(bool show)
+    {
+        hintHud.SetActive(show);
     }
 }
