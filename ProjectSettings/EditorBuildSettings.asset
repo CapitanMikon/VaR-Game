@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MyProject/Scenes/PrototypingVR.unity
+    path: Assets/MyProject/Scenes/Main.unity
     guid: 4c6ff12216a94b04a86c5d5ea85d0c8c
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: efb7b87eb8ecd9d46b3a0351222f323f, type: 2}

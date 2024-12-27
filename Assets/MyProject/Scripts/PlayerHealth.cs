@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private Transform spawnPoint;
     public int maxHealth = 3;
+    public static event Action PlayerDied;
+    public static event Action PlayerNoLives;
     
     private int currentHealth;
 
@@ -23,14 +26,22 @@ public class PlayerHealth : MonoBehaviour
     private void TryRespawn()
     {
         currentHealth--;
-        transform.position = spawnPoint.position;
+        PlayerDied?.Invoke();
         
         Debug.LogWarning($"Player Died remaining hearts = {currentHealth}!");
         if (currentHealth <= 0)
         {
             Debug.LogWarning("GameOver for pc player!");
             PcPlayerOver();
+            PlayerNoLives?.Invoke();
         }
+        /*else
+        {
+            PlayerDied?.Invoke();
+        }*/
+        
+        transform.position = spawnPoint.position;
+        
 
     }
 
