@@ -10,6 +10,7 @@ public class Target : MonoBehaviour
 
     [SerializeField] private int maxHits = 3;
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Rigidbody rb;
 
     private Color[] damageColor = new[] { new Color(1, 0, 0),  new Color(1f, 1f, 0f), new Color(1f, 1f, 0.98f)};
     private int currentHits = 0;
@@ -20,17 +21,19 @@ public class Target : MonoBehaviour
         UpdateColors();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.position += Vector3.right * (speed * Time.deltaTime);
+        var nextPos =  transform.position + Vector3.right * (speed * Time.fixedDeltaTime);
 
         if (transform.position.x > max)
         {
-            transform.position = new Vector3(min, transform.position.y, transform.position.z);
+            nextPos = new Vector3(min, transform.position.y, transform.position.z);
         }else if(transform.position.x < min)
         {
-            transform.position = new Vector3(max, transform.position.y, transform.position.z);
+            nextPos = new Vector3(max, transform.position.y, transform.position.z);
         }
+        
+        rb.MovePosition(nextPos);
     }
 
     private void OnTriggerEnter(Collider other)

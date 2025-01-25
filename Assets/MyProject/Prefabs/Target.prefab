@@ -157,6 +157,7 @@ MonoBehaviour:
   speed: 2
   maxHits: 3
   meshRenderer: {fileID: 8736772904269921916}
+  rb: {fileID: 215926028998713465}
 --- !u!54 &215926028998713465
 Rigidbody:
   m_ObjectHideFlags: 0
