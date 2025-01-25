@@ -11,7 +11,7 @@ public class Target : MonoBehaviour
     [SerializeField] private int maxHits = 3;
     [SerializeField] private MeshRenderer meshRenderer;
 
-    private Color[] damageColor = new[] { new Color(1, 0, 0),  new Color(0.66f, 0.24f, 0.22f), new Color(0.79f, 0.47f, 0.43f)};
+    private Color[] damageColor = new[] { new Color(1, 0, 0),  new Color(1f, 1f, 0f), new Color(1f, 1f, 0.98f)};
     private int currentHits = 0;
 
     private void OnEnable()

@@ -7,6 +7,7 @@ public class PcCanvasController : MonoBehaviour
     private const String pcPlayerWinText = "You Won!"; 
     private const String pcPlayerLostText = "You Lost!";
 
+    [SerializeField] private bool isVr;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private GameObject textGO;
 
@@ -29,8 +30,10 @@ public class PcCanvasController : MonoBehaviour
     private void GameControllerOnGameFinished(int playerId)
     {
         textGO.SetActive(true);
-        text.text = playerId == 0 ? pcPlayerWinText : pcPlayerLostText;
         
-
+        if(!isVr)
+            text.text = playerId == 0 ? pcPlayerWinText : pcPlayerLostText;
+        else
+            text.text = playerId == 0 ? pcPlayerLostText : pcPlayerWinText;
     }
 }
