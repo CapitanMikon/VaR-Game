@@ -22,5 +22,10 @@ namespace UnityEngine.XR.Content.Interaction
         {
             rb.useGravity = true;
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Destroy(gameObject);
+        }
     }
 }
