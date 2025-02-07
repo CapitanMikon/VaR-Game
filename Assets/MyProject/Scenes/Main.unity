@@ -9026,6 +9026,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6432292403088282125}
     m_Modifications:
+    - target: {fileID: 1450760115660436290, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
+      propertyPath: moveSpeed
+      value: 1.25
+      objectReference: {fileID: 0}
     - target: {fileID: 3891939539857756842, guid: 8004c14f76b621440a78074b9d104fd6, type: 3}
       propertyPath: spawnPoint
       value: 
